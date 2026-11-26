@@ -343,7 +343,9 @@ button{font:inherit;color:inherit}
     trennwand: '<path d="M8 12V68M72 12V68M28 20V60M40 20V60M52 20V60"/>',
     tageslicht: '<path d="M14 12H66V68H14ZM40 12V68M14 40H66"/>',
     garderobe: '<path d="M40 26V20a6 6 0 1 1 6-6M40 26L10 54H70Z"/>',
-    tuer: '<path d="M18 70V10H54V70M8 70H72M44 42H48"/>'
+    tuer: '<path d="M18 70V10H54V70M8 70H72M44 42H48"/>',
+    parkhaus: '<path d="M10 10H70V70H10ZM30 58V22H44a10 10 0 0 1 0 20H30"/>',
+    hotel: '<path d="M8 70V34H72V70M8 54H72M18 34V22a6 6 0 0 1 6-6H56a6 6 0 0 1 6 6V34M22 44H34"/>'
   };
   function svg(name) {
     return '<svg viewBox="0 0 80 80" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="butt" stroke-linejoin="miter" aria-hidden="true">' + (ICON[name] || '') + '</svg>';
@@ -446,9 +448,9 @@ button{font:inherit;color:inherit}
     },
     eingang: {
       kicker: 'Rathausplatz', title: 'Haupteingang',
-      text: 'Durch das Eingangsportal gelangen Gäste vom Rathausplatz direkt ins Foyer.',
+      text: 'Durch das Eingangsportal gelangen Gäste vom Rathausplatz direkt ins Foyer. Unter dem Rathausplatz liegt ein Parkhaus, direkt neben der Stadthalle ein Hotel.',
       specs: [],
-      feats: [['tuer', 'Ebenerdig']],
+      feats: [['tuer', 'Ebenerdig'], ['parkhaus', 'Parkhaus unter dem Platz'], ['hotel', 'Hotel nebenan']],
       action: { label: 'Außenansicht zeigen', run: function () { showCover(); } }
     }
   };
@@ -512,8 +514,7 @@ button{font:inherit;color:inherit}
     ],
     'empore': [
       nav(-8, -110, 'foyer-eingang', 'Zum Foyer'),
-      info(2, 26, 'empore', 'Empore'),
-      info(24, 52, 'empore', 'Fensterfront')
+      info(2, 26, 'empore', 'Empore')
     ],
     'workshop': [
       nav(-9, 177, 'thuega-saal', 'Zum Thüga Saal', -90, 0),
