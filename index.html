@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>360°-Rundgang · Stadthalle Singen</title>
-<meta name="description" content="Virtueller 360°-Rundgang durch die Stadthalle Singen: Foyer, Thüga Saal, Empore, Workshop- und Seminarräume.">
+<meta name="description" content="Virtueller 360°-Rundgang durch die Stadthalle Singen: Foyer, Thüga Saal, Empore, Tagungs- und Seminarräume.">
 <meta name="robots" content="noindex">
 <meta property="og:title" content="360°-Rundgang · Stadthalle Singen">
-<meta property="og:description" content="Foyer, Thüga Saal, Empore, Workshop- und Seminarräume in 360°.">
+<meta property="og:description" content="Foyer, Thüga Saal, Empore, Tagungs- und Seminarräume in 360°.">
 <meta property="og:image" content="img/aussenansicht.jpg">
 <meta name="theme-color" content="#0B0A0B">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 16 16%22%3E%3Crect width=%2216%22 height=%2216%22 fill=%22%2389146A%22/%3E%3Crect x=%224%22 y=%2212%22 width=%228%22 height=%222%22 fill=%22white%22/%3E%3C/svg%3E">
@@ -146,14 +146,21 @@ button{font:inherit;color:inherit}
 /* ---------- Raum-Info (Banner-Sheet) ---------- */
 .sheet{position:absolute;z-index:12;left:var(--gl);right:var(--gr);bottom:calc(var(--strip-h,170px) + 6px);display:flex;pointer-events:none;visibility:hidden}
 .sheet.is-open{visibility:visible}
-.sheet .banner{pointer-events:auto;width:100%;max-width:560px;--lamw:46px;--pad:18px 20px 20px 20px}
+.sheet .banner{pointer-events:auto;width:100%;max-width:640px;--lamw:46px;--pad:18px 20px 20px 20px}
 .sheet .title{font-size:clamp(1.5rem,4.4vw,2.1rem);padding-right:40px}
 .sheet-text{margin:2px 0 0;font-size:.9rem;line-height:1.55;color:rgba(255,255,255,.9);max-width:58ch}
-.specs{display:flex;flex-wrap:wrap;gap:10px 26px;margin:6px 0 0;padding:12px 0 0;border-top:1px solid var(--line)}
-.spec{display:flex;align-items:center;gap:9px}
-.spec svg{width:24px;height:24px;color:var(--icon);flex:none}
+.specs{display:grid;gap:8px;margin:6px 0 0;padding:12px 0 0;border-top:1px solid var(--line)}
+.spec-row{display:flex;flex-wrap:wrap;align-items:center;gap:10px 24px}
+.spec-label{font-weight:600;font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--unit);margin-bottom:-4px}
+.spec{display:flex;align-items:center;gap:10px}
+.spec svg{width:28px;height:28px;color:var(--icon);flex:none}
+.spec-txt{display:flex;align-items:baseline;flex-wrap:wrap;gap:0 5px}
 .spec b{font-weight:600;font-size:1.3rem;font-variant-numeric:tabular-nums}
-.spec small{font-weight:400;font-size:.8rem;color:var(--unit);margin-left:3px}
+.spec small{font-weight:400;font-size:.8rem;color:var(--unit)}
+.spec small.as-num{font-weight:600;font-size:1rem;color:var(--white)}
+.spec small.times{font-size:1rem;margin:0 2px}
+.spec-sep{width:2px;height:28px;background:var(--unit)}
+.spec-plus{font-weight:400;font-size:1.3rem;color:var(--unit)}
 .feats{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
 .feat{display:inline-flex;align-items:center;gap:8px;padding:7px 10px 7px 8px;background:rgba(255,255,255,.08);border-left:3px solid var(--magenta);font-weight:600;font-size:.64rem;letter-spacing:.14em;text-transform:uppercase}
 .feat svg{width:18px;height:18px;color:var(--icon)}
@@ -296,7 +303,7 @@ button{font:inherit;color:inherit}
           <h2 class="title">Stadthalle Singen</h2>
           <span class="underline" aria-hidden="true"></span>
           <div class="stagger">
-            <p class="cover-text">Foyer, Thüga Saal, Empore, Workshop- und Seminarräume in 360°.</p>
+            <p class="cover-text">Foyer, Thüga Saal, Empore, Tagungs- und Seminarräume in 360°.</p>
             <div class="cover-actions">
               <button class="btn" type="button" id="startBtn">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12c3 2.2 15 2.2 18 0"/><path d="M12 3c-2.6 3-2.6 15 0 18"/></svg>
@@ -319,93 +326,124 @@ button{font:inherit;color:inherit}
   var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var $ = function (id) { return document.getElementById(id); };
 
-  /* ---------- Icons (Linienstil wie im Film) ---------- */
+  /* ---------- Icons (Strichstil der Film-Banner: 80er-Raster, gerade Enden, 45°-Ecken) ---------- */
   var ICON = {
-    area: '<path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/><rect x="8" y="8" width="8" height="8"/>',
-    people: '<circle cx="9" cy="8" r="3"/><path d="M3.5 20c0-3.3 2.5-6 5.5-6s5.5 2.7 5.5 6"/><circle cx="17" cy="9" r="2.4"/><path d="M15.5 14.3c.5-.2 1-.3 1.5-.3 2.5 0 4.5 2.3 4.5 5.2"/>',
-    height: '<path d="M12 3v18M8 6.5 12 3l4 3.5M8 17.5l4 3.5 4-3.5"/><path d="M4 3h3M4 21h3"/>',
-    floor: '<path d="M3 15h18M6 15v5M18 15v5"/><path d="M12 4v7M9 8l3 3 3-3"/>',
-    rig: '<path d="M3 4h18"/><path d="M6 4v9M10 4v12M14 4v9M18 4v12"/><path d="M4.5 13h3M8.5 16h3M12.5 13h3M16.5 16h3"/>',
-    stage: '<path d="M3 17h18v3H3z"/><path d="M5 17V6c2.5 0 3.5 2 3.5 5M19 17V6c-2.5 0-3.5 2-3.5 5"/><path d="M3 4h18"/>',
-    walls: '<path d="M3 5v14M21 5v14"/><path d="M8 7v10M12 7v10M16 7v10"/><path d="M6 12h-2M20 12h-2"/>',
-    coat: '<path d="M12 6a2 2 0 1 1 2-2"/><path d="M12 6v1.5L3.5 15c-.8.7-.3 2 .8 2h15.4c1.1 0 1.6-1.3.8-2L12 7.5"/>',
-    light: '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
-    door: '<path d="M5 21V4h10v17"/><path d="M15 6h4v15"/><circle cx="12" cy="13" r=".6" fill="currentColor"/><path d="M3 21h18"/>'
+    stehend: '<circle cx="40" cy="18" r="9"/><path d="M22 72V50a18 18 0 0 1 36 0v22"/>',
+    sitzend: '<path d="M26 48V18h28v30M16 34h10v24M54 34h10v24M16 48h48M22 58v12M58 58v12"/>',
+    flaeche: '<path d="M8 24V8h16M56 8h16v16M72 56v16H56M24 72H8V56"/><path d="M24 24h32v32H24z"/>',
+    abstufbar: '<path d="M8 68h16V54h16V40h16V26h16"/>',
+    ebene: '<path d="M8 67H72M14 50H66M23 42L15 50L23 58M57 42L65 50L57 58"/>',
+    buehne: '<path d="M8 40H72V64H8ZM50 40V64M8 24H50M8 17V31M50 17V31"/>',
+    vorbuehne: '<path d="M8 40H72V64H8ZM50 40V64M50 24H72M50 17V31M72 17V31"/>',
+    graben: '<path d="M8 46H20V68H60V46H72M20 30H60M20 23V37M60 23V37"/>',
+    zuege: '<path d="M8 10H72M20 10V58M40 10V68M60 10V58M14 58H26M34 68H46M54 58H66"/>',
+    dachlast: '<path d="M8 11H72M40 11V26M34 26H46M28 34H52L60 62H20Z"/>',
+    lichtpult: '<path d="M8 20H72V64H8ZM21 28V56M34 28V56M47 28V56M60 28V56M15 48H27M28 36H40M41 44H53M54 32H66"/>',
+    movinghead: '<path d="M8 6H72M40 6V40M24.8 39.1L46.1 54L55.2 40.9L33.9 26ZM46.1 54L48.9 62.1L63.8 40.8L55.2 40.9"/>',
+    trennwand: '<path d="M8 12V68M72 12V68M28 20V60M40 20V60M52 20V60"/>',
+    tageslicht: '<path d="M14 12H66V68H14ZM40 12V68M14 40H66"/>',
+    garderobe: '<path d="M40 26V20a6 6 0 1 1 6-6M40 26L10 54H70Z"/>',
+    tuer: '<path d="M18 70V10H54V70M8 70H72M44 42H48"/>'
   };
   function svg(name) {
-    return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + ICON[name] + '</svg>';
+    return '<svg viewBox="0 0 80 80" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="butt" stroke-linejoin="miter" aria-hidden="true">' + (ICON[name] || '') + '</svg>';
   }
 
-  /* ---------- Raum-Infos (Werte = Platzhalter, wie im Film) ---------- */
-  var PH = 'Werte sind Platzhalter und werden noch ergänzt.';
+  /* ---------- Raum-Infos: finale Banner-Werte aus dem Imagevideo (Stand 26.11.2026) ----------
+     Spec-Reihenfolge wie im Film: Personen stehend → Personen sitzend → Fläche.
+     „ca.“ = aus dem Gebäudemodell errechnete Fläche (auf 5 m² gerundet).
+     Zeichen in specs: S(icon, zahl, einheit, ca) · D(icon, [teile]) für Maße · SEP = „oder“ · PLUS = „und“ */
+  function S(i, n, u, ca) { return { i: i, n: n, u: u, ca: !!ca }; }
+  function D(i, parts) { return { i: i, parts: parts }; }
+  function T(i, text) { return { i: i, text: text }; }
+  var SEP = { sep: true }, PLUS = { plus: true };
+
   var ROOMS = {
     foyer: {
       kicker: 'Erdgeschoss', title: 'Foyer',
       text: 'Das designte Foyer empfängt die Gäste vom Rathausplatz und verbindet alle Säle und Räume des Hauses. Ideal für Empfänge, Catering und Ausstellungen.',
-      specs: [['area', '000', 'm²'], ['people', '000', 'Pers.']],
-      note: PH
+      specs: [[S('stehend', '620', 'stehend'), S('flaeche', '470', 'm²')]]
+    },
+    empore: {
+      kicker: 'Obergeschoss', title: 'Empore',
+      text: 'Die Empore im Obergeschoss mit Garderobe. Von hier geht der Blick als Tribüne über den Kleinen Saal hinweg in den Thüga Saal. Rundes Oberlicht und große Fensterfront bringen viel Tageslicht.',
+      specs: [[S('stehend', '250', 'stehend'), S('sitzend', '203', 'sitzend'), S('flaeche', '157', 'm²')]],
+      feats: [['garderobe', 'Garderobe'], ['tageslicht', 'Tageslicht']]
     },
     thuega: {
-      kicker: 'Erdgeschoss', title: 'Thüga Saal',
-      text: 'Der große Saal öffnet sich direkt zum Foyer. Der absenkbare Boden und die Bühnentechnik mit vielen Bühnenzügen machen ihn für Kongress, Konzert und Theater gleichermaßen geeignet.',
-      specs: [['area', '000', 'm²'], ['people', '000', 'Pers.'], ['height', '00', 'm']],
-      feats: [['floor', 'Boden absenkbar'], ['rig', 'Bühnenzüge'], ['stage', 'Theater möglich']],
-      note: PH
+      kicker: '', title: 'Thüga Saal',
+      text: 'Der große Saal mit Bühne, Orchestergraben und abstufbarem Boden – für Kongress, Konzert, Theater und Tanz. Zum Foyer hin schließt der Kleine Saal an.',
+      specs: [[S('stehend', '1.200', 'stehend'), S('sitzend', '681', 'sitzend'), S('flaeche', '630', 'm²', true)]]
     },
     boden: {
-      kicker: 'Thüga Saal', title: 'Absenkbarer Boden',
-      text: 'Der Saalboden lässt sich absenken. So entsteht je nach Veranstaltung eine ebene Fläche oder ein ansteigender Zuschauerraum.',
-      specs: [['area', '000', 'm²']],
-      feats: [['floor', 'Boden absenkbar']],
-      note: PH
+      kicker: 'Thüga Saal', title: 'Boden',
+      text: 'Der Saalboden ist abstufbar: ansteigend für Theater und Klassik oder eben für Tanz.',
+      specs: [[T('abstufbar', 'Theater, Klassik'), SEP, T('ebene', 'Tanz')]]
     },
     buehne: {
       kicker: 'Thüga Saal', title: 'Bühne',
-      text: 'Bühnentechnik mit vielen Bühnenzügen, damit auch Theaterproduktionen möglich sind.',
-      specs: [['stage', '00 × 00', 'm'], ['rig', '00', 'Züge']],
-      feats: [['stage', 'Theater möglich']],
-      note: PH
+      text: 'Spielfläche mit Vorbühne. Davor liegt der Orchestergraben.',
+      specs: [
+        [D('buehne', [['13,8', 'n'], ['(B)', 's'], ['×', 'x'], ['9,2', 'n'], ['(T)', 's'], ['m', 'u']]), PLUS,
+         D('vorbuehne', [['1,2', 'n'], ['(T)', 's'], ['m', 'u']])],
+        [D('graben', [['15', 'n'], ['(B)', 's'], ['×', 'x'], ['3,8', 'n'], ['(T)', 's'], ['m', 'u']])]
+      ],
+      rowLabels: ['Bühne + Vorbühne', 'Orchestergraben']
+    },
+    zuege: {
+      kicker: 'Thüga Saal', title: 'Bühnenzüge',
+      text: 'Bühnentechnik für Theaterproduktionen und große Shows.',
+      specs: [[T('zuege', '30 Hand- & E-Züge'), D(null, [['300–750', 'n'], ['kg je Zug', 'u']])], [D('dachlast', [['15', 'n'], ['t', 'u']])]],
+      rowLabels: ['', 'Dachlast']
+    },
+    licht: {
+      kicker: 'Thüga Saal', title: 'Lichttechnik',
+      text: 'Professionelle Lichttechnik für Konzert, Theater und Event.',
+      specs: [[D('lichtpult', [['2 ×', 'n'], ['grandMA3 light', 'u']])], [D('movinghead', [['40+', 'n'], ['intelligente Scheinwerfer', 'u']])]]
+    },
+    kleinersaal: {
+      kicker: '', title: 'Kleiner Saal',
+      text: 'Der Kleine Saal liegt zwischen Foyer und Thüga Saal, darüber die Empore als Tribüne.',
+      specs: [[S('stehend', '600', 'stehend'), S('sitzend', '250', 'sitzend'), S('flaeche', '265', 'm²', true)]]
     },
     regie: {
       kicker: 'Thüga Saal', title: 'Regie',
-      text: 'Die Technikregie liegt auf Höhe des Rangs mit freiem Blick auf Saal und Bühne.',
-      specs: [],
-      note: PH
-    },
-    empore: {
-      kicker: 'Obergeschoss', title: 'Foyer-Empore',
-      text: 'Die Empore über dem Foyer mit Garderobe und Fläche für Workshops. Das runde Oberlicht und die große Fensterfront sorgen für viel Tageslicht.',
-      specs: [['area', '000', 'm²'], ['people', '000', 'Pers.']],
-      feats: [['coat', 'Garderobe'], ['light', 'Tageslicht']],
-      note: PH
+      text: 'Die Technikregie liegt auf Höhe der Empore mit freiem Blick auf Saal und Bühne.',
+      specs: []
     },
     workshop: {
-      kicker: 'Erdgeschoss', title: 'Workshopräume 1–3',
-      text: 'Hier komplett geöffnet: ein großer Raum im Erdgeschoss mit Glasfront zum Rathausplatz. Mit Trennwänden lässt er sich in drei einzelne Workshopräume teilen.',
-      specs: [['area', '000', 'm²'], ['people', '000', 'Pers.'], ['height', '0,0', 'm']],
-      feats: [['walls', 'Kombinierbar'], ['light', 'Tageslicht']],
-      note: PH
+      kicker: 'Erdgeschoss', title: 'Tagungsraum 1–3',
+      text: 'Hier komplett geöffnet: ein großer Raum im Erdgeschoss mit Glasfront zum Rathausplatz. Zwei mobile Trennwände teilen ihn in drei Tagungsräume mit je ca. 50 m².',
+      specs: [[S('stehend', '200', 'stehend'), S('sitzend', '156', 'sitzend (Reihe)'), S('flaeche', '150', 'm²', true)]],
+      feats: [['trennwand', 'Kombinierbar'], ['tageslicht', 'Tageslicht']]
     },
     schiebewand: {
-      kicker: 'Workshopräume', title: 'Trennwand',
-      text: 'An dieser Stelle schließt die Trennwand. So entstehen aus dem großen Raum bis zu drei einzelne Workshopräume, passend zur Gruppengröße.',
+      kicker: 'Tagungsraum 1–3', title: 'Trennwand',
+      text: 'An dieser Stelle schließt eine der beiden mobilen Trennwände. So entstehen aus dem großen Raum bis zu drei einzelne Tagungsräume mit je ca. 50 m².',
       specs: [],
-      feats: [['walls', 'Kombinierbar']],
-      note: ''
+      feats: [['trennwand', 'Kombinierbar']]
     },
     seminar: {
       kicker: '1. Obergeschoss', title: 'Seminarraum 1+2',
-      text: 'Zwei Seminarräume im ersten Obergeschoss mit Fensterfront und Tageslicht. Getrennt oder zusammen nutzbar.',
-      specs: [['area', '000', 'm²'], ['people', '000', 'Pers.'], ['height', '0,0', 'm']],
-      feats: [['walls', 'Kombinierbar'], ['light', 'Tageslicht']],
-      note: PH
+      text: 'Zwei Seminarräume im ersten Obergeschoss mit Fensterfront und Tageslicht. Getrennt je ca. 50 m² oder zusammen als ein Raum nutzbar.',
+      specs: [[S('stehend', '150', 'stehend'), S('sitzend', '112', 'sitzend (Reihe)'), S('flaeche', '100', 'm²', true)]],
+      feats: [['trennwand', 'Kombinierbar'], ['tageslicht', 'Tageslicht']]
+    },
+    seminarwand: {
+      kicker: 'Seminarraum 1+2', title: 'Trennwand',
+      text: 'Mit der Trennwand wird der Raum in Seminarraum 1 und 2 mit je ca. 50 m² geteilt. Geöffnet entsteht ein großer Raum.',
+      specs: [], feats: [['trennwand', 'Kombinierbar']]
+    },
+    rathausplatz: {
+      kicker: 'Tagungsraum 1–3', title: 'Glasfront',
+      text: 'Die Tagungsräume liegen ebenerdig am Rathausplatz. Die Glasfront bringt viel Tageslicht in die Räume.',
+      specs: [], feats: [['tageslicht', 'Tageslicht'], ['tuer', 'Ebenerdig']]
     },
     eingang: {
       kicker: 'Rathausplatz', title: 'Haupteingang',
       text: 'Durch das Eingangsportal gelangen Gäste vom Rathausplatz direkt ins Foyer.',
       specs: [],
-      feats: [['door', 'Ebenerdig']],
-      note: '',
+      feats: [['tuer', 'Ebenerdig']],
       action: { label: 'Außenansicht zeigen', run: function () { showCover(); } }
     }
   };
@@ -416,9 +454,9 @@ button{font:inherit;color:inherit}
     'foyer-eingang': { kicker: 'Erdgeschoss', title: 'Foyer · Eingang', card: 'Foyer · Eingang', yaw: -58, pitch: -3 },
     'foyer-saal':    { kicker: 'Erdgeschoss', title: 'Foyer · Thüga Saal', card: 'Foyer · Saal', yaw: -18, pitch: 0 },
     'thuega-saal':   { kicker: 'Erdgeschoss', title: 'Thüga Saal', card: 'Thüga Saal', yaw: -62, pitch: 2 },
-    'thuega-rang':   { kicker: 'Thüga Saal', title: 'Blick vom Rang', card: 'Saal · Rang', yaw: 86, pitch: -8 },
-    'empore':        { kicker: 'Obergeschoss', title: 'Foyer-Empore', card: 'Empore', yaw: 22, pitch: 2 },
-    'workshop':      { kicker: 'Erdgeschoss', title: 'Workshopräume', card: 'Workshopräume', yaw: 14, pitch: -2 },
+    'thuega-rang':   { kicker: 'Obergeschoss · Empore', title: 'Blick in den Saal', card: 'Empore · Saal', yaw: 86, pitch: -8 },
+    'empore':        { kicker: 'Obergeschoss', title: 'Empore', card: 'Empore', yaw: 22, pitch: 2 },
+    'workshop':      { kicker: 'Erdgeschoss', title: 'Tagungsraum 1–3', card: 'Tagungsräume', yaw: 14, pitch: -2 },
     'seminar':       { kicker: '1. Obergeschoss', title: 'Seminarraum 1+2', card: 'Seminarräume', yaw: -34, pitch: -2 }
   };
 
@@ -435,7 +473,7 @@ button{font:inherit;color:inherit}
       nav(-8, -32, 'thuega-saal', 'Thüga Saal', 85, 0),
       nav(12, -158, 'seminar', 'Seminarräume'),
       nav(-2, -127, 'empore', 'Empore', -110, 0),
-      nav(-9, 11, 'workshop', 'Workshopräume'),
+      nav(-9, 11, 'workshop', 'Tagungsräume'),
       info(14, -32, 'thuega', 'Thüga Saal'),
       info(6, 86, 'eingang', 'Haupteingang'),
       info(-24, 20, 'foyer', 'Foyer')
@@ -445,23 +483,27 @@ button{font:inherit;color:inherit}
       nav(-6, 32, 'thuega-saal', 'Thüga Saal', 85, 0),
       nav(10, -110, 'empore', 'Empore', -110, 0),
       nav(22, 163, 'seminar', 'Seminarräume'),
-      nav(-10, 60, 'workshop', 'Workshopräume'),
+      nav(-10, 60, 'workshop', 'Tagungsräume'),
       info(14, 30, 'thuega', 'Thüga Saal'),
       info(-24, -20, 'foyer', 'Foyer')
     ],
     'thuega-saal': [
       nav(-4, 78, 'foyer-saal', 'Zum Foyer', -150, 0),
-      nav(15, 106, 'thuega-rang', 'Zum Rang'),
-      nav(-7, 5, 'workshop', 'Workshopräume'),
+      nav(15, 106, 'thuega-rang', 'Zur Empore'),
+      nav(-7, 5, 'workshop', 'Tagungsräume'),
       info(8, -91, 'buehne', 'Bühne'),
-      info(-34, -10, 'boden', 'Boden absenkbar'),
-      info(26, -40, 'thuega', 'Thüga Saal')
+      info(27, -91, 'zuege', 'Bühnenzüge'),
+      info(50, -62, 'licht', 'Lichttechnik'),
+      info(-34, -10, 'boden', 'Boden'),
+      info(20, -28, 'thuega', 'Thüga Saal'),
+      info(4, 128, 'kleinersaal', 'Kleiner Saal')
     ],
     'thuega-rang': [
       nav(-18, 86, 'thuega-saal', 'Zum Saal', -90, 0),
       info(10, 86, 'buehne', 'Bühne'),
       info(20, -95, 'regie', 'Regie'),
-      info(26, 40, 'thuega', 'Thüga Saal')
+      info(26, 40, 'thuega', 'Thüga Saal'),
+      info(-30, 130, 'empore', 'Empore')
     ],
     'empore': [
       nav(-8, -110, 'foyer-eingang', 'Zum Foyer'),
@@ -471,7 +513,7 @@ button{font:inherit;color:inherit}
     'workshop': [
       nav(-9, 177, 'thuega-saal', 'Zum Thüga Saal', -90, 0),
       nav(-7, 108, 'foyer-eingang', 'Zum Foyer'),
-      info(20, -36, 'workshop', 'Workshopräume'),
+      info(20, -36, 'workshop', 'Tagungsraum 1–3'),
       info(4, -132, 'schiebewand', 'Trennwand'),
       info(4, 128, 'schiebewand', 'Trennwand'),
       info(10, 14, 'rathausplatz', 'Rathausplatz')
@@ -480,16 +522,6 @@ button{font:inherit;color:inherit}
       info(16, 0, 'seminar', 'Seminarraum 1+2'),
       info(8, -113, 'seminarwand', 'Trennwand')
     ]
-  };
-  ROOMS.seminarwand = {
-    kicker: 'Seminarräume', title: 'Trennwand',
-    text: 'Mit der Trennwand wird der Raum in Seminarraum 1 und 2 geteilt. Geöffnet entsteht ein großer Raum.',
-    specs: [], feats: [['walls', 'Kombinierbar']], note: ''
-  };
-  ROOMS.rathausplatz = {
-    kicker: 'Workshopräume', title: 'Glasfront',
-    text: 'Die Workshopräume liegen ebenerdig am Rathausplatz. Die Glasfront bringt viel Tageslicht in die Räume.',
-    specs: [], feats: [['light', 'Tageslicht'], ['door', 'Ebenerdig']], note: ''
   };
 
   /* ---------- Bildgröße passend zum Gerät ---------- */
@@ -557,14 +589,31 @@ button{font:inherit;color:inherit}
     $('sheetTitle').textContent = r.title;
     $('sheetText').textContent = r.text;
     var specs = $('sheetSpecs'); specs.innerHTML = '';
-    (r.specs || []).forEach(function (s) {
-      var d = document.createElement('div'); d.className = 'spec';
-      d.innerHTML = svg(s[0]) + '<span><b></b><small></small></span>';
-      d.querySelector('b').textContent = s[1];
-      d.querySelector('small').textContent = s[2];
-      specs.appendChild(d);
+    (r.specs || []).forEach(function (row, ri) {
+      var line = document.createElement('div'); line.className = 'spec-row';
+      var lab = r.rowLabels && r.rowLabels[ri];
+      if (lab) { var l = document.createElement('span'); l.className = 'spec-label'; l.textContent = lab; specs.appendChild(l); }
+      row.forEach(function (t) {
+        var el;
+        if (t.sep) { el = document.createElement('span'); el.className = 'spec-sep'; el.setAttribute('aria-label', 'oder'); }
+        else if (t.plus) { el = document.createElement('span'); el.className = 'spec-plus'; el.textContent = '+'; }
+        else {
+          el = document.createElement('div'); el.className = 'spec';
+          if (t.i) el.innerHTML = svg(t.i);
+          var txt = document.createElement('span'); txt.className = 'spec-txt';
+          var add = function (text, cls) { var e = document.createElement(cls === 'n' ? 'b' : 'small'); e.textContent = text; if (cls === 'x') e.className = 'times'; if (cls === 't') e.className = 'as-num'; txt.appendChild(e); };
+          if (t.ca) add('ca.', 'pre');
+          if (t.n) { add(t.n, 'n'); add(t.u, 'u'); }
+          if (t.text) add(t.text, 't');
+          (t.parts || []).forEach(function (p) { add(p[0], p[1]); });
+          el.appendChild(txt);
+        }
+        line.appendChild(el);
+      });
+      specs.appendChild(line);
     });
     specs.hidden = !(r.specs && r.specs.length);
+    $('sheetKicker').hidden = !r.kicker;
     var feats = $('sheetFeats'); feats.innerHTML = '';
     (r.feats || []).forEach(function (f) {
       var d = document.createElement('span'); d.className = 'feat';
