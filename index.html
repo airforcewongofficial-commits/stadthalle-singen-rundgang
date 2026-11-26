@@ -461,7 +461,7 @@ button{font:inherit;color:inherit}
     'foyer-eingang': { kicker: 'Erdgeschoss', title: 'Foyer · Eingang', card: 'Foyer · Eingang', yaw: -58, pitch: -3 },
     'foyer-saal':    { kicker: 'Erdgeschoss', title: 'Foyer · Thüga Saal', card: 'Foyer · Saal', yaw: -18, pitch: 0 },
     'thuega-saal':   { kicker: 'Erdgeschoss', title: 'Thüga Saal', card: 'Thüga Saal', yaw: -62, pitch: 2 },
-    'thuega-rang':   { kicker: 'Thüga Saal', title: 'Blick vom Rang', card: 'Saal · Rang', yaw: 86, pitch: -8 },
+    'thuega-rang':   { kicker: 'Thüga Saal', title: 'Blick vom Rang', card: 'Saal · Rang', yaw: 86, pitch: -8, minPitch: -60 },
     'empore':        { kicker: 'Obergeschoss', title: 'Empore', card: 'Empore', yaw: 22, pitch: 2 },
     'workshop':      { kicker: 'Erdgeschoss', title: 'Tagungsraum 1–3', card: 'Tagungsräume', yaw: 14, pitch: -2 },
     'seminar':       { kicker: '1. Obergeschoss', title: 'Seminarraum 1+2', card: 'Seminarräume', yaw: -34, pitch: -2 }
@@ -787,6 +787,7 @@ button{font:inherit;color:inherit}
         type: 'equirectangular',
         panorama: PANO_DIR + id + '.jpg',
         pitch: SCENES[id].pitch, yaw: SCENES[id].yaw,
+        minPitch: SCENES[id].minPitch || -70,
         hotSpots: HOTSPOTS[id] || []
       };
     });
@@ -798,6 +799,7 @@ button{font:inherit;color:inherit}
         showControls: false,
         compass: false,
         hfov: baseHfov, minHfov: 35, maxHfov: 120,
+        minPitch: -70, maxPitch: 90,   /* Blick nach unten begrenzt: Stativ bleibt unsichtbar */
         friction: 0.12,
         strings: {
           loadButtonLabel: 'Panorama laden',
