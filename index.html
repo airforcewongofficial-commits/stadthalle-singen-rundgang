@@ -375,7 +375,8 @@ button{font:inherit;color:inherit}
     thuega: {
       kicker: '', title: 'Thüga Saal',
       text: 'Der große Saal mit Bühne, Orchestergraben und abstufbarem Boden – für Kongress, Konzert, Theater und Tanz. Zum Foyer hin schließt der Kleine Saal an.',
-      specs: [[S('stehend', '1.200', 'stehend'), S('sitzend', '681', 'sitzend'), S('flaeche', '630', 'm²', true)]]
+      specs: [[S('stehend', '1.200', 'stehend'), S('sitzend', '681', 'sitzend'), S('flaeche', '630', 'm²', true)]],
+      action: { label: 'Mit Reihenbestuhlung ansehen', run: function () { go('saal-bestuhlt'); } }
     },
     boden: {
       kicker: 'Thüga Saal', title: 'Boden',
@@ -408,9 +409,15 @@ button{font:inherit;color:inherit}
       text: 'Der Kleine Saal liegt zwischen Foyer und Thüga Saal, darüber der Rang.',
       specs: [[S('stehend', '600', 'stehend'), S('sitzend', '250', 'sitzend'), S('flaeche', '265', 'm²', true)]]
     },
+    thuegaB: {
+      kicker: '', title: 'Thüga Saal',
+      text: 'Der Thüga Saal mit Reihenbestuhlung, hier mit Blick zur Bühne.',
+      specs: [[S('stehend', '1.200', 'stehend'), S('sitzend', '681', 'sitzend'), S('flaeche', '630', 'm²', true)]],
+      action: { label: 'Ohne Bestuhlung ansehen', run: function () { go('thuega-saal'); } }
+    },
     rang: {
       kicker: 'Thüga Saal', title: 'Rang',
-      text: 'Der Rang über dem Kleinen Saal mit festen Sitzreihen und freiem Blick auf Saal und Bühne.',
+      text: 'Der Rang über dem Kleinen Saal mit ansteigenden Sitzreihen und freiem Blick auf Saal und Bühne.',
       specs: []
     },
     regie: {
@@ -456,12 +463,15 @@ button{font:inherit;color:inherit}
   };
 
   /* ---------- Standorte ---------- */
-  var ORDER = ['foyer-eingang', 'foyer-saal', 'thuega-saal', 'thuega-rang', 'empore', 'workshop', 'seminar'];
+  var ORDER = ['foyer-eingang', 'foyer-saal', 'thuega-saal', 'saal-bestuhlt', 'saal-buehne', 'rang-vorne', 'thuega-rang', 'empore', 'workshop', 'seminar'];
   var SCENES = {
     'foyer-eingang': { kicker: 'Erdgeschoss', title: 'Foyer · Eingang', card: 'Foyer · Eingang', yaw: -58, pitch: -3 },
     'foyer-saal':    { kicker: 'Erdgeschoss', title: 'Foyer · Thüga Saal', card: 'Foyer · Saal', yaw: -18, pitch: 0 },
     'thuega-saal':   { kicker: 'Erdgeschoss', title: 'Thüga Saal', card: 'Thüga Saal', yaw: -62, pitch: 2 },
-    'thuega-rang':   { kicker: 'Thüga Saal', title: 'Blick vom Rang', card: 'Saal · Rang', yaw: 86, pitch: -8, minPitch: -60 },
+    'saal-bestuhlt': { kicker: 'Thüga Saal', title: 'Reihenbestuhlung', card: 'Saal · bestuhlt', yaw: 80, pitch: 0 },
+    'saal-buehne':   { kicker: 'Thüga Saal', title: 'Vor der Bühne', card: 'Saal · Bühne', yaw: -95, pitch: 2 },
+    'rang-vorne':    { kicker: 'Thüga Saal', title: 'Rang · vorne', card: 'Rang · vorne', yaw: 88, pitch: -8 },
+    'thuega-rang':   { kicker: 'Thüga Saal', title: 'Rang · oben', card: 'Rang · oben', yaw: 86, pitch: -8, minPitch: -60 },
     'empore':        { kicker: 'Obergeschoss', title: 'Empore', card: 'Empore', yaw: 22, pitch: 2 },
     'workshop':      { kicker: 'Erdgeschoss', title: 'Tagungsraum 1–3', card: 'Tagungsräume', yaw: 14, pitch: -2 },
     'seminar':       { kicker: '1. Obergeschoss', title: 'Seminarraum 1+2', card: 'Seminarräume', yaw: -34, pitch: -2 }
@@ -498,6 +508,7 @@ button{font:inherit;color:inherit}
       nav(-4, 78, 'foyer-saal', 'Zum Foyer', -150, 0),
       nav(15, 106, 'thuega-rang', 'Zum Rang'),
       nav(-7, 5, 'workshop', 'Tagungsräume'),
+      nav(-12, -91, 'saal-buehne', 'Zur Bühne'),
       info(8, -91, 'buehne', 'Bühne'),
       info(27, -91, 'zuege', 'Bühnenzüge'),
       info(50, -62, 'licht', 'Lichttechnik'),
@@ -507,12 +518,39 @@ button{font:inherit;color:inherit}
     ],
     'thuega-rang': [
       nav(-18, 86, 'thuega-saal', 'Zum Saal', -90, 0),
+      nav(-30, 60, 'rang-vorne', 'Rang · vorne'),
       info(10, 86, 'buehne', 'Bühne'),
       info(20, -95, 'regie', 'Regie'),
       info(26, 40, 'thuega', 'Thüga Saal'),
       info(-30, 130, 'rang', 'Rang')
     ],
+    'saal-buehne': [
+      nav(-14, 90, 'thuega-saal', 'Saalmitte', -91, 0),
+      nav(14, 95, 'rang-vorne', 'Zum Rang'),
+      nav(-5, 36, 'workshop', 'Tagungsräume'),
+      info(5, -95, 'buehne', 'Bühne'),
+      info(32, -95, 'zuege', 'Bühnenzüge'),
+      info(42, 75, 'licht', 'Lichttechnik'),
+      info(-35, 150, 'boden', 'Boden')
+    ],
+    'saal-bestuhlt': [
+      nav(-4, -95, 'foyer-saal', 'Zum Foyer'),
+      nav(-12, 80, 'saal-buehne', 'Zur Bühne'),
+      info(22, 40, 'thuegaB', 'Thüga Saal'),
+      info(8, 88, 'buehne', 'Bühne'),
+      info(36, 100, 'licht', 'Lichttechnik')
+    ],
+    'rang-vorne': [
+      nav(-28, 88, 'saal-buehne', 'Zum Saal', -95, 0),
+      nav(4, -100, 'thuega-rang', 'Rang · oben'),
+      info(-14, -60, 'rang', 'Rang'),
+      info(16, -75, 'regie', 'Regie'),
+      info(4, 88, 'buehne', 'Bühne'),
+      info(32, 55, 'licht', 'Lichttechnik'),
+      info(12, 130, 'thuega', 'Thüga Saal')
+    ],
     'empore': [
+      nav(10, -110, 'seminar', 'Seminarräume'),
       nav(-8, -110, 'foyer-eingang', 'Zum Foyer'),
       info(2, 26, 'empore', 'Empore')
     ],
@@ -631,7 +669,7 @@ button{font:inherit;color:inherit}
     $('sheetNote').textContent = r.note || '';
     $('sheetNote').hidden = !r.note;
     var a = $('sheetAction');
-    if (r.action && key === 'eingang') {
+    if (r.action) {
       a.textContent = r.action.label; a.hidden = false;
       a.onclick = function () { closeSheet(); r.action.run(); };
     } else { a.hidden = true; a.onclick = null; }

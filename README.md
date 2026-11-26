@@ -6,7 +6,7 @@ Aufnahmen und Umsetzung: Air.Force.Wong UG, Frankfurt am Main.
 **Stand 26.11.2026:** Raumwerte wie in den finalen Bannern des Imagevideos (Kapazitäten laut Stadthalle, Bestuhlungspläne 12.11.2026; mit „ca.“ gekennzeichnete Flächen aus dem Gebäudemodell errechnet).
 
 ## Standorte
-Außenansicht · Foyer Eingang · Foyer Thüga Saal · Thüga Saal (mit Bühne, Bühnenzügen, Lichttechnik, Boden, Kleinem Saal) · Blick vom Rang · Empore · Tagungsraum 1–3 · Seminarraum 1+2
+Außenansicht · Foyer Eingang · Foyer Thüga Saal · Thüga Saal (Saalmitte, mit Reihenbestuhlung, vor der Bühne) · Rang vorne · Rang oben · Empore · Tagungsraum 1–3 · Seminarraum 1+2
 
 ## In eine Website einbauen
 
