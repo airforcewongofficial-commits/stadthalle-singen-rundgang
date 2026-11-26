@@ -366,7 +366,7 @@ button{font:inherit;color:inherit}
     },
     empore: {
       kicker: 'Obergeschoss', title: 'Empore',
-      text: 'Die Empore im Obergeschoss mit Garderobe. Von hier geht der Blick als Tribüne über den Kleinen Saal hinweg in den Thüga Saal. Rundes Oberlicht und große Fensterfront bringen viel Tageslicht.',
+      text: 'Die Empore im Obergeschoss mit Garderobe. Rundes Oberlicht und große Fensterfront bringen viel Tageslicht.',
       specs: [[S('stehend', '250', 'stehend'), S('sitzend', '203', 'sitzend'), S('flaeche', '157', 'm²')]],
       feats: [['garderobe', 'Garderobe'], ['tageslicht', 'Tageslicht']]
     },
@@ -403,12 +403,17 @@ button{font:inherit;color:inherit}
     },
     kleinersaal: {
       kicker: '', title: 'Kleiner Saal',
-      text: 'Der Kleine Saal liegt zwischen Foyer und Thüga Saal, darüber die Empore als Tribüne.',
+      text: 'Der Kleine Saal liegt zwischen Foyer und Thüga Saal, darüber der Rang.',
       specs: [[S('stehend', '600', 'stehend'), S('sitzend', '250', 'sitzend'), S('flaeche', '265', 'm²', true)]]
+    },
+    rang: {
+      kicker: 'Thüga Saal', title: 'Rang',
+      text: 'Der Rang über dem Kleinen Saal mit festen Sitzreihen und freiem Blick auf Saal und Bühne.',
+      specs: []
     },
     regie: {
       kicker: 'Thüga Saal', title: 'Regie',
-      text: 'Die Technikregie liegt auf Höhe der Empore mit freiem Blick auf Saal und Bühne.',
+      text: 'Die Technikregie liegt auf Höhe des Rangs mit freiem Blick auf Saal und Bühne.',
       specs: []
     },
     workshop: {
@@ -454,7 +459,7 @@ button{font:inherit;color:inherit}
     'foyer-eingang': { kicker: 'Erdgeschoss', title: 'Foyer · Eingang', card: 'Foyer · Eingang', yaw: -58, pitch: -3 },
     'foyer-saal':    { kicker: 'Erdgeschoss', title: 'Foyer · Thüga Saal', card: 'Foyer · Saal', yaw: -18, pitch: 0 },
     'thuega-saal':   { kicker: 'Erdgeschoss', title: 'Thüga Saal', card: 'Thüga Saal', yaw: -62, pitch: 2 },
-    'thuega-rang':   { kicker: 'Obergeschoss · Empore', title: 'Blick in den Saal', card: 'Empore · Saal', yaw: 86, pitch: -8 },
+    'thuega-rang':   { kicker: 'Thüga Saal', title: 'Blick vom Rang', card: 'Saal · Rang', yaw: 86, pitch: -8 },
     'empore':        { kicker: 'Obergeschoss', title: 'Empore', card: 'Empore', yaw: 22, pitch: 2 },
     'workshop':      { kicker: 'Erdgeschoss', title: 'Tagungsraum 1–3', card: 'Tagungsräume', yaw: 14, pitch: -2 },
     'seminar':       { kicker: '1. Obergeschoss', title: 'Seminarraum 1+2', card: 'Seminarräume', yaw: -34, pitch: -2 }
@@ -489,7 +494,7 @@ button{font:inherit;color:inherit}
     ],
     'thuega-saal': [
       nav(-4, 78, 'foyer-saal', 'Zum Foyer', -150, 0),
-      nav(15, 106, 'thuega-rang', 'Zur Empore'),
+      nav(15, 106, 'thuega-rang', 'Zum Rang'),
       nav(-7, 5, 'workshop', 'Tagungsräume'),
       info(8, -91, 'buehne', 'Bühne'),
       info(27, -91, 'zuege', 'Bühnenzüge'),
@@ -503,7 +508,7 @@ button{font:inherit;color:inherit}
       info(10, 86, 'buehne', 'Bühne'),
       info(20, -95, 'regie', 'Regie'),
       info(26, 40, 'thuega', 'Thüga Saal'),
-      info(-30, 130, 'empore', 'Empore')
+      info(-30, 130, 'rang', 'Rang')
     ],
     'empore': [
       nav(-8, -110, 'foyer-eingang', 'Zum Foyer'),
